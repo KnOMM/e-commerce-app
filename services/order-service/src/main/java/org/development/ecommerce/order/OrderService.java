@@ -9,6 +9,9 @@ import org.development.ecommerce.order.dto.OrderLineRequest;
 import org.development.ecommerce.order.dto.OrderMapper;
 import org.development.ecommerce.order.dto.OrderRequest;
 import org.development.ecommerce.order.dto.OrderResponse;
+import org.development.ecommerce.orderline.OrderLineService;
+import org.development.ecommerce.payment.PaymentClient;
+import org.development.ecommerce.payment.PaymentRequest;
 import org.development.ecommerce.product.ProductClient;
 import org.development.ecommerce.product.ProductPurchaseRequest;
 import org.development.ecommerce.product.ProductPurchaseResponse;
@@ -26,6 +29,7 @@ public class OrderService {
     private final OrderMapper mapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     public Order createOrder(OrderRequest orderRequest) {
 
@@ -35,7 +39,7 @@ public class OrderService {
         List<ProductPurchaseResponse> productsList = productClient.getProductsList(orderRequest.products());
         var order = this.orderRepository.save(mapper.toOrder(orderRequest));
 
-        for (ProductPurchaseRequest purchaseRequest: orderRequest.products()) {
+        for (ProductPurchaseRequest purchaseRequest : orderRequest.products()) {
             orderLineService.saveOrderLine(
                     new OrderLineRequest(
                             null,
@@ -45,6 +49,15 @@ public class OrderService {
                     )
             );
         }
+
+        var paymentRequest = new PaymentRequest(
+                orderRequest.amount(),
+                orderRequest.paymentMethod(),
+                order.getId(),
+                orderRequest.reference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
         orderProducer.sendOrderConfirmation(
                 new OrderConfirmation(
@@ -60,10 +73,10 @@ public class OrderService {
     }
 
     public List<OrderResponse> findAll() {
-       return orderRepository.findAll()
-               .stream()
-               .map(mapper::fromOrder)
-               .toList();
+        return orderRepository.findAll()
+                .stream()
+                .map(mapper::fromOrder)
+                .toList();
     }
 
     public OrderResponse findById(UUID orderId) {

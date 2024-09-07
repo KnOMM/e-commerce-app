@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+</head>
+<body>
+<h1>Order Details</h1>
+
+<p>Dear <span th:text="${customerName}">Customer</span>,</p>
+
+<p>Thank you for your order. Here are the details of your purchase:</p>
+
+<ul>
+    <li><strong>Amount:</strong> <span th:text="${amount}">$0.00</span></li>
+    <li><strong>Order Reference:</strong> <span th:text="${reference}">REF123456</span></li>
+</ul>
+
+<h2>Products</h2>
+<ul>
+    <li th:each="product : ${products}">
+        <span th:text="${product.name}">Product Name</span> -
+        <span th:text="${product.quantity}">Quantity</span> -
+        <span th:text="${product.price}">$0.00</span>
+    </li>
+</ul>
+
+<p>If you have any questions or need further assistance, please feel free to contact our customer service team.</p>
+
+<p>Best regards,</p>
+<p>Your Company Name</p>
+</body>
+</html>
