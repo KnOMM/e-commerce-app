@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.development.ecommerce.kafka.product.Product;
+import org.development.ecommerce.kafka.product.ProductPurchaseResponse;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -65,7 +66,7 @@ public class EmailService {
             String customerName,
             BigDecimal amount,
             String orderReference,
-            List<Product> productList
+            List<ProductPurchaseResponse> productList
     ) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());

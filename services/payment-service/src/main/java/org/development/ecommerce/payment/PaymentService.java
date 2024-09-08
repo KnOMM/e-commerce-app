@@ -2,10 +2,11 @@ package org.development.ecommerce.payment;
 
 import lombok.RequiredArgsConstructor;
 import org.development.ecommerce.notification.NotificationProducer;
-import org.development.ecommerce.notification.PaymentNotificationRequest;
+import org.development.ecommerce.notification.PaymentConfirmation;
 import org.development.ecommerce.payment.dto.PaymentRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,7 +20,7 @@ public class PaymentService {
     public UUID createPayment(PaymentRequest request) {
         var payment = repository.save(mapper.toPayment(request));
         notificationProducer.sendNotification(
-                new PaymentNotificationRequest(
+                new PaymentConfirmation(
                         request.orderReference(),
                         request.amount(),
                         request.paymentMethod(),
@@ -29,5 +30,9 @@ public class PaymentService {
                 )
         );
         return payment.getId();
+    }
+
+    public List<Payment> getAllPayments() {
+        return repository.findAll();
     }
 }

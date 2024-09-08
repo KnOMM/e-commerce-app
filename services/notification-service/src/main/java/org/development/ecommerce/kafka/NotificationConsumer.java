@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.development.ecommerce.email.EmailService;
 import org.development.ecommerce.kafka.payment.PaymentConfirmation;
-import org.development.ecommerce.kafka.order.OrderConfirmation;
 import org.development.ecommerce.notification.Notification;
 import org.development.ecommerce.notification.NotificationRepository;
 import org.development.ecommerce.notification.NotificationType;
@@ -34,7 +33,7 @@ public class NotificationConsumer {
         );
 
         // todo send email
-        var customerName = paymentConfirmation.customerFirstname() + " " + paymentConfirmation.customerLastname();
+        var customerName = paymentConfirmation.customerFirstName() + " " + paymentConfirmation.customerLastName();
         emailService.sendPaymentSuccessEmail(
                 paymentConfirmation.customerEmail(),
                 customerName,
@@ -59,9 +58,9 @@ public class NotificationConsumer {
         emailService.sendOrderConfirmationEmail(
                 orderConfirmation.customer().email(),
                 customerName,
-                orderConfirmation.amount(),
+                orderConfirmation.totalPrice(),
                 orderConfirmation.orderReference(),
-                orderConfirmation.productList()
+                orderConfirmation.products()
         );
     }
 }

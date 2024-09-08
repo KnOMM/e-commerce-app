@@ -3,16 +3,14 @@ package org.development.ecommerce.payment;
 import lombok.RequiredArgsConstructor;
 import org.development.ecommerce.payment.dto.PaymentRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/payments")
+@RequestMapping("/api/v1/payments")
 public class PaymentController {
 
     private final PaymentService service;
@@ -22,5 +20,10 @@ public class PaymentController {
             @RequestBody PaymentRequest request
     ) {
         return ResponseEntity.ok(service.createPayment(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Payment>> getPayments() {
+        return ResponseEntity.ok(service.getAllPayments());
     }
 }

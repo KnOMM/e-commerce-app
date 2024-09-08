@@ -9,6 +9,7 @@ import org.development.ecommerce.order.dto.OrderLineRequest;
 import org.development.ecommerce.order.dto.OrderMapper;
 import org.development.ecommerce.order.dto.OrderRequest;
 import org.development.ecommerce.order.dto.OrderResponse;
+import org.development.ecommerce.orderline.OrderLine;
 import org.development.ecommerce.orderline.OrderLineService;
 import org.development.ecommerce.payment.PaymentClient;
 import org.development.ecommerce.payment.PaymentRequest;
@@ -17,6 +18,7 @@ import org.development.ecommerce.product.ProductPurchaseRequest;
 import org.development.ecommerce.product.ProductPurchaseResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,23 +33,26 @@ public class OrderService {
     private final OrderProducer orderProducer;
     private final PaymentClient paymentClient;
 
-    public Order createOrder(OrderRequest orderRequest) {
+    public OrderDTO createOrder(OrderRequest orderRequest) {
 
         var customer = customerClient.findById(orderRequest.customerId())
                 .orElseThrow(() -> new BusinessException("Customer not found, id: " + orderRequest.customerId()));
 
         List<ProductPurchaseResponse> productsList = productClient.getProductsList(orderRequest.products());
-        var order = this.orderRepository.save(mapper.toOrder(orderRequest));
+        Order order = this.orderRepository.save(mapper.toOrder(orderRequest));
+
+        List<OrderLine> orderLines = new ArrayList<>();
 
         for (ProductPurchaseRequest purchaseRequest : orderRequest.products()) {
-            orderLineService.saveOrderLine(
+            var orderLine =  orderLineService.saveOrderLine(
                     new OrderLineRequest(
-                            null,
+                            UUID.randomUUID(),
                             order.getId(),
                             purchaseRequest.productId(),
                             purchaseRequest.quantity()
                     )
             );
+            orderLines.add(orderLine);
         }
 
         var paymentRequest = new PaymentRequest(
@@ -68,8 +73,16 @@ public class OrderService {
                         productsList
                 )
         );
+        List<OrderLineDTO> orderLineDTOS = orderLines.stream()
+                .map(ol -> new OrderLineDTO(ol.getId(), ol.getProductId(), ol.getQuantity()))
+                .toList();
 
-        return order;
+        return new OrderDTO(order.getId(),
+                order.getReference(),
+                order.getTotalAmount().longValue(),
+                order.getPaymentMethod(),
+                order.getCustomerId(),
+                orderLineDTOS);
     }
 
     public List<OrderResponse> findAll() {

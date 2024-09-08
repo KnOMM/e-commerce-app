@@ -1,4 +1,6 @@
-package org.development.ecommerce.kafka.payment;
+package org.development.ecommerce.kafka;
+
+import org.development.ecommerce.kafka.payment.PaymentMethod;
 
 import java.math.BigDecimal;
 
@@ -11,5 +13,6 @@ public record PaymentConfirmation(
         String customerEmail
 ) {
 }
+
 
 

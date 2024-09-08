@@ -1,8 +1,8 @@
 package org.development.ecommerce.kafka;
 
-import org.development.ecommerce.customer.CustomerResponse;
-import org.development.ecommerce.order.dto.PaymentMethod;
-import org.development.ecommerce.product.ProductPurchaseResponse;
+import org.development.ecommerce.kafka.customer.CustomerResponse;
+import org.development.ecommerce.kafka.payment.PaymentMethod;
+import org.development.ecommerce.kafka.product.ProductPurchaseResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,16 +1,17 @@
 package org.development.ecommerce.kafka.order;
 
+import org.development.ecommerce.kafka.customer.CustomerResponse;
 import org.development.ecommerce.kafka.payment.PaymentMethod;
-import org.development.ecommerce.kafka.product.Product;
+import org.development.ecommerce.kafka.product.ProductPurchaseResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public record OrderConfirmation(
         String orderReference,
-        BigDecimal amount,
+        BigDecimal totalPrice,
         PaymentMethod paymentMethod,
-        Customer customer,
-        List<Product> productList
+        CustomerResponse customer,
+        List<ProductPurchaseResponse> products
 ) {
 }

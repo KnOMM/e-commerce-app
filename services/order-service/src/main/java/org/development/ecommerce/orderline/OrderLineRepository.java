@@ -1,7 +1,5 @@
-package org.development.ecommerce.order;
+package org.development.ecommerce.orderline;
 
-import org.development.ecommerce.orderline.OrderLine;
-import org.development.ecommerce.orderline.OrderLineResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

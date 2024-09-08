@@ -29,7 +29,8 @@ public class ProductMapper {
         return new ProductPurchaseResponse(
                 product.getId(),
                 product.getName(),
-                quantity
+                quantity,
+                product.getPrice()
         );
     }
 }

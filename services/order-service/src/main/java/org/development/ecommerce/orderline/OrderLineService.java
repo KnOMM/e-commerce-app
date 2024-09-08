@@ -1,7 +1,6 @@
 package org.development.ecommerce.orderline;
 
 import lombok.RequiredArgsConstructor;
-import org.development.ecommerce.order.OrderLineRepository;
 import org.development.ecommerce.order.dto.OrderLineMapper;
 import org.development.ecommerce.order.dto.OrderLineRequest;
 import org.springframework.stereotype.Service;
