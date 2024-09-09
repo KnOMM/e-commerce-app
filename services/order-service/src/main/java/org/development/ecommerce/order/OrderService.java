@@ -52,6 +52,7 @@ public class OrderService {
                             purchaseRequest.quantity()
                     )
             );
+            System.out.println(orderLine.getProductId());
             orderLines.add(orderLine);
         }
 
@@ -73,8 +74,9 @@ public class OrderService {
                         productsList
                 )
         );
+        productsList.forEach(System.out::println);
         List<OrderLineDTO> orderLineDTOS = orderLines.stream()
-                .map(ol -> new OrderLineDTO(ol.getId(), ol.getProductId(), ol.getQuantity()))
+                .map(ol -> new OrderLineDTO(ol.getId(), ol.getProductId(), ol.getQuantity(), productsList.stream().filter(p -> p.id().equals(ol.getProductId())).findAny().get().price()))
                 .toList();
 
         return new OrderDTO(order.getId(),

@@ -35,7 +35,7 @@ public class EmailService {
     ) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
-        mimeMessageHelper.setFrom("contact@aliboucoding.com");
+        mimeMessageHelper.setFrom("contact@test.com");
         final String templateName = EmailTemplates.PAYMENT_CONFIRMATION.getTemplate();
 
         Map<String, Object> variables = new HashMap<>();

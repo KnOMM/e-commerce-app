@@ -18,7 +18,7 @@ public class OrderLineController {
     private final OrderLineService orderLineService;
 
     @GetMapping("/order/{order-id}")
-    public ResponseEntity<List<OrderLineResponse>> getOrderLine(@PathVariable UUID orderId){
+    public ResponseEntity<List<OrderLineResponse>> getOrderLine(@PathVariable(value = "order-id") UUID orderId){
         return ResponseEntity.ok(orderLineService.findAllByOrderId(orderId));
     }
 }
